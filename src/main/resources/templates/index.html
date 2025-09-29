@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div id="floating-dots"></div>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">✨ My To-Do List ✨</h1>
+            <p class="subtitle">Stay organized and productive with a touch of charm!</p>
+        </div>
+        <div class="task-stats">
+            <div class="stat-item">
+                <span class="stat-number" th:text="${totalTasks}">0</span>
+                <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" th:text="${completedTasks}">0</span>
+                <span class="stat-label">Done ✓</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" th:text="${pendingTasks}">0</span>
+                <span class="stat-label">Pending ⏳</span>
+            </div>
+        </div>
+        <form th:action="@{/add}" method="post" class="input-container">
+            <input type="text" name="task" class="task-input" placeholder="What needs to be done? 🤔" maxlength="100" required>
+            <button class="add-btn" type="submit">➕ Add Task</button>
+        </form>
+
+        <div class="tasks-container">
+            <div th:each="todo : ${todos}" th:classappend="${todo.completed} ? 'completed' : ''" class="task-item">
+                
+                <div class="task-content">
+                    <a th:href="@{/update/{id}(id=${todo.id})}" th:classappend="${todo.completed} ? 'checked' : ''" class="task-checkbox"></a>
+                    <div class="task-text" th:text="${todo.task}">Task description goes here</div>
+                </div>
+
+                <div class="actions">
+                    <a th:if="${!todo.completed}" th:href="@{/edit/{id}(id=${todo.id})}" class="action-btn edit-btn">Edit</a>
+                    
+                    <a th:if="${todo.completed}" th:href="@{/update/{id}(id=${todo.id})}" class="action-btn undo-btn">Undo</a>
+                    
+                    <a th:href="@{/delete/{id}(id=${todo.id})}" class="action-btn delete-btn">Delete</a>
+                </div>
+
+            </div>
+
+            <div th:if="${#lists.isEmpty(todos)}" class="empty-state">
+                <div class="empty-icon">🌸</div>
+                <div class="empty-text">No tasks yet! Let's add some magic to your day!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createFloatingDots() {
+            const container = document.getElementById('floating-dots');
+            if (!container) return;
+            const numberOfDots = 20;
+            for (let i = 0; i < numberOfDots; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'floating-dot';
+                dot.style.left = Math.random() * 100 + '%';
+                dot.style.top = Math.random() * 100 + '%';
+                const size = 6 + Math.random() * 12;
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+                dot.style.animationDelay = Math.random() * 8 + 's';
+                dot.style.animationDuration = (6 + Math.random() * 4) + 's';
+                container.appendChild(dot);
+            }
+        }
+        createFloatingDots();
+    </script>
+</body>
+</html>

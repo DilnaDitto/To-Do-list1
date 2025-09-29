@@ -1,0 +1,406 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 100;
+    padding: 50;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Changed to pink/purple gradient */
+    background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 50%, #fbc2eb 100%); 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+    text-align: center; /* Center body content visually */
+}
+
+/* Flying dots animation - no change, still looks good with new background */
+.floating-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    animation: float 8s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+        opacity: 0.4;
+    }
+    25% {
+        transform: translateY(-120px) translateX(60px) rotate(90deg);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-240px) translateX(-40px) rotate(180deg);
+        opacity: 0.6;
+    }
+    75% {
+        transform: translateY(-180px) translateX(100px) rotate(270deg);
+        opacity: 0.3;
+    }
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    padding: 40px;
+    width: 100%;
+    max-width: 550px; /* Slightly wider for better appeal */
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    z-index: 10;
+    margin: auto; /* Ensure container itself is centered */
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.title {
+    font-size: 3.2rem; /* Slightly larger */
+    font-weight: 700;
+    /* Updated gradient for title */
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    animation: colorShift 3s ease-in-out infinite;
+}
+
+@keyframes colorShift {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(20deg); }
+}
+
+.subtitle {
+    color: #888; /* Slightly softer subtitle color */
+    font-size: 1.2rem; /* Slightly larger */
+    font-weight: 400; /* Slightly bolder */
+}
+
+.task-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    padding: 20px;
+    /* Updated gradient for stats */
+    background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+    border-radius: 18px; /* Slightly more rounded */
+    color: white;
+    box-shadow: 0 8px 20px rgba(251, 194, 235, 0.3); /* Subtle shadow */
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem; /* Larger numbers */
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 1rem; /* Slightly larger labels */
+    opacity: 0.95;
+    font-weight: 300;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    align-items: center; /* Vertically align items */
+}
+
+.task-input {
+    flex: 1;
+    padding: 18px 25px; /* More padding */
+    border: 2px solid #e0e0e0;
+    border-radius: 30px; /* More rounded */
+    font-size: 1.1rem; /* Larger font */
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.task-input:focus {
+    border-color: #a6c1ee; /* Pink border on focus */
+    box-shadow: 0 0 0 4px rgba(166, 193, 238, 0.2); /* Soft shadow on focus */
+    background: white;
+}
+
+.add-btn {
+    padding: 18px 30px; /* More padding */
+    /* Updated gradient for add button */
+    background: linear-gradient(135deg, #a6c1ee, #fbc2eb);
+    color: red;
+    border: none;
+    border-radius: 30px; /* More rounded */
+    font-size: 1.1rem; /* Larger font */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    min-width: 120px; /* Wider button */
+    box-shadow: 0 8px 20px rgba(166, 193, 238, 0.3); /* Soft shadow */
+}
+
+.add-btn:hover {
+    transform: translateY(-3px) scale(1.02); /* More prominent hover effect */
+    box-shadow: 0 12px 25px rgba(166, 193, 238, 0.4);
+}
+.add-btn:active {
+    transform: translateY(0px) scale(0.98);
+}
+
+
+.tasks-container {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.tasks-container::-webkit-scrollbar {
+    width: 8px; /* Slightly wider scrollbar */
+}
+
+.tasks-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.tasks-container::-webkit-scrollbar-thumb {
+    /* Updated scrollbar thumb gradient */
+    background: linear-gradient(135deg, #a6c1ee, #fbc2eb);
+    border-radius: 10px;
+}
+
+.task-item {
+    background: pink;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 18px; /* More rounded */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); /* Stronger shadow */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out content and buttons */
+    gap: 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.task-item:hover {
+    transform: translateY(-3px); /* More prominent hover effect */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.task-item.completed {
+    opacity: 0.75; /* Slightly less opaque */
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: #999; /* Softer grey for completed text */
+}
+
+.task-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+    text-align: left; /* Ensure task text aligns left */
+}
+
+.task-checkbox {
+    width: 28px; /* Slightly larger checkbox */
+    height: 28px;
+    border: 2px solid #e0e0e0; /* Softer border */
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+.task-checkbox:hover {
+    border-color: #fbc2eb; /* Pink border on hover */
+}
+
+.task-checkbox.checked {
+    /* Updated gradient for checked checkbox */
+    background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+    border-color: #a6c1ee;
+}
+
+.task-checkbox.checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 16px; /* Larger checkmark */
+}
+
+.task-text {
+    flex: 1;
+    font-size: 1.1rem; /* Slightly larger task text */
+    color: #444; /* Slightly darker for better readability */
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+.actions {
+    display: flex;
+    gap: 10px; /* Slightly more space between buttons */
+    flex-shrink: 0;
+}
+
+.action-btn {
+    text-decoration: none;
+    color: white;
+    border: none;
+    border-radius: 10px; /* Slightly more rounded */
+    width: 70px; /* Slightly wider buttons */
+    height: 40px; /* Taller buttons */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem; /* Slightly larger font */
+    font-weight: 500;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Stronger button shadow */
+}
+
+.edit-btn {
+    /* Updated gradient for edit button */
+    background: linear-gradient(135deg, #a6c1ee, #fbc2eb);
+}
+
+.edit-btn:hover {
+    transform: translateY(-3px); /* More prominent hover */
+    box-shadow: 0 6px 15px rgba(166, 193, 238, 0.4);
+}
+.edit-btn:active {
+    transform: translateY(0px);
+}
+
+.delete-btn {
+    /* Updated gradient for delete button */
+    background: linear-gradient(135deg, #ff9a9e, #ffb8c0);
+    width: 70px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.delete-btn:hover {
+    transform: translateY(-3px); /* More prominent hover */
+    box-shadow: 0 6px 15px rgba(255, 154, 158, 0.4);
+}
+.delete-btn:active {
+    transform: translateY(0px);
+}
+
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #bbb; /* Softer color */
+}
+
+.empty-icon {
+    font-size: 4.5rem; /* Larger icon */
+    margin-bottom: 25px;
+    opacity: 0.4; /* Slightly less opaque */
+}
+
+.empty-text {
+    font-size: 1.3rem; /* Larger text */
+    font-weight: 300;
+}
+
+/* Responsive design - keeping previous logic but with new colors */
+@media (max-width: 480px) {
+    .container {
+        padding: 25px;
+        margin: 10px;
+    }
+    
+    .title {
+        font-size: 2.5rem;
+    }
+    
+    .input-container {
+        flex-direction: column;
+    }
+    
+    .add-btn {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .task-stats {
+        padding: 15px;
+    }
+    
+    .stat-number {
+        font-size: 1.6rem;
+    }
+
+    .task-item {
+        flex-direction: column; /* Stack elements on small screens */
+        align-items: flex-start; /* Align to the left when stacked */
+        padding: 15px;
+    }
+
+    .task-content {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .actions {
+        width: 100%;
+        justify-content: space-around; /* Distribute buttons */
+        gap: 5px;
+    }
+
+    .action-btn {
+        flex: 1; /* Make buttons take equal width */
+        width: auto;
+    }
+}
+/* ... (all your existing CSS code) */
+
+/* Add this new style at the end of the file */
+.undo-btn {
+    background: #6c757d; /* A neutral grey color */
+    color: white;
+}
+
+.undo-btn:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
