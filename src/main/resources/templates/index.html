@@ -1,81 +1,58 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My To-Do List</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body { background-color: #FFD3D6; }
+        .completed-task { text-decoration: line-through; color: #FFC6CA; }
+        .card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    </style>
 </head>
 <body>
-    <div id="floating-dots"></div>
-    <div class="container">
-        <div class="header">
-            <h1 class="title">✨ My To-Do List ✨</h1>
-            <p class="subtitle">Stay organized and productive with a touch of charm!</p>
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h1 class="card-title text-center mb-0">📝 My To-Do List</h1>
         </div>
-        <div class="task-stats">
-            <div class="stat-item">
-                <span class="stat-number" th:text="${totalTasks}">0</span>
-                <span class="stat-label">Total</span>
+        <div class="card-body">
+            <div class="d-flex justify-content-end mb-3">
+                <a th:href="@{/new}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Add New Task
+                </a>
             </div>
-            <div class="stat-item">
-                <span class="stat-number" th:text="${completedTasks}">0</span>
-                <span class="stat-label">Done ✓</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" th:text="${pendingTasks}">0</span>
-                <span class="stat-label">Pending ⏳</span>
-            </div>
-        </div>
-        <form th:action="@{/add}" method="post" class="input-container">
-            <input type="text" name="task" class="task-input" placeholder="What needs to be done? 🤔" maxlength="100" required>
-            <button class="add-btn" type="submit">➕ Add Task</button>
-        </form>
-
-        <div class="tasks-container">
-            <div th:each="todo : ${todos}" th:classappend="${todo.completed} ? 'completed' : ''" class="task-item">
-                
-                <div class="task-content">
-                    <a th:href="@{/update/{id}(id=${todo.id})}" th:classappend="${todo.completed} ? 'checked' : ''" class="task-checkbox"></a>
-                    <div class="task-text" th:text="${todo.task}">Task description goes here</div>
-                </div>
-
-                <div class="actions">
-                    <a th:if="${!todo.completed}" th:href="@{/edit/{id}(id=${todo.id})}" class="action-btn edit-btn">Edit</a>
+            <ul class="list-group list-group-flush">
+                <li th:each="item : ${todoItems}" class="list-group-item d-flex justify-content-between align-items-center">
                     
-                    <a th:if="${todo.completed}" th:href="@{/update/{id}(id=${todo.id})}" class="action-btn undo-btn">Undo</a>
+                    <div class="d-flex align-items-center">
+                        <a th:href="@{/toggle/{id}(id=${item.id})}" class="me-3 fs-4 text-decoration-none">
+                           <i th:class="${item.completed} ? 'fa-regular fa-square-check text-success' : 'fa-regular fa-square'"></i>
+                        </a>
+                        <div>
+                            <span th:text="${item.task}" th:class="${item.completed} ? 'completed-task' : ''">Task Description</span>
+                            <br>
+                            <small class="text-muted" th:if="${item.dueDate != null}">
+                                <i class="far fa-calendar-alt"></i> Due: <span th:text="${#temporals.format(item.dueDate, 'dd-MMM-yyyy hh:mm a')}"></span>
+                            </small>
+                        </div>
+                    </div>
                     
-                    <a th:href="@{/delete/{id}(id=${todo.id})}" class="action-btn delete-btn">Delete</a>
-                </div>
-
-            </div>
-
-            <div th:if="${#lists.isEmpty(todos)}" class="empty-state">
-                <div class="empty-icon">🌸</div>
-                <div class="empty-text">No tasks yet! Let's add some magic to your day!</div>
-            </div>
+                    <div>
+                        <a th:href="@{/edit/{id}(id=${item.id})}" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-pencil-alt"></i> Update
+                        </a>
+                        <a th:href="@{/delete/{id}(id=${item.id})}" class="btn btn-sm btn-outline-danger">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </a>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
+</div>
 
-    <script>
-        function createFloatingDots() {
-            const container = document.getElementById('floating-dots');
-            if (!container) return;
-            const numberOfDots = 20;
-            for (let i = 0; i < numberOfDots; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'floating-dot';
-                dot.style.left = Math.random() * 100 + '%';
-                dot.style.top = Math.random() * 100 + '%';
-                const size = 6 + Math.random() * 12;
-                dot.style.width = size + 'px';
-                dot.style.height = size + 'px';
-                dot.style.animationDelay = Math.random() * 8 + 's';
-                dot.style.animationDuration = (6 + Math.random() * 4) + 's';
-                container.appendChild(dot);
-            }
-        }
-        createFloatingDots();
-    </script>
 </body>
 </html>
